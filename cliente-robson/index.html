@@ -638,6 +638,11 @@
 }
 
   </style>
+
+<!-- Libs para gerar PDF e tentar compartilhar (carregar antes do script principal) -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
 </head>
 
 <body>
@@ -1215,7 +1220,13 @@ async function gerarPdfBlob(){
 }
 
 async function gerarPdfECompartilhar(){
-  try{
+    // iPhone/Safari às vezes não carrega libs a tempo; se não tiver, cai pro print (sempre funciona)
+    if(typeof html2canvas !== 'function' || !window.jspdf){
+      try{ if(typeof fillPDF==='function') fillPDF(); window.print(); }catch(e){}
+      return;
+    }
+
+    try{
     const blob = await gerarPdfBlob();
     const file = new File([blob], "proposta.pdf", { type: "application/pdf" });
 
