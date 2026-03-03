@@ -340,6 +340,7 @@
       font-weight:900;
     }
 
+    .pdf .instaladorBox{
       margin-top: 10px;
       padding-top: 8px;
       border-top: 1px solid #eef2f7;
@@ -347,6 +348,7 @@
       font-weight: 900;
       color:#0b1220;
     }
+
     .pdf .instRow{
       display:flex;
       gap:14px;
@@ -529,6 +531,37 @@
       .pdf{ display:block !important; }
       @page{ margin: 14mm; }
     }
+  
+/* --- FIXES (v12-layout) --- */
+.pdf .headRow{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items:start;
+  margin-top:-22px; /* aproxima do logo */
+}
+.pdf .datebox{
+  text-align:right;
+  font-weight:1000;
+  color:#111827;
+  white-space:nowrap;
+}
+.pdf .datebox small{
+  color: var(--brand-strong);
+  font-weight:1000;
+  letter-spacing:.4px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.pdf .datebox #pdfData{ font-size: 12px; font-weight: 1000; }
+.pdf .datebox .validadeLine{ margin-top: 6px; font-size: 12px; font-weight: 900; color:#0b1220; }
+.pdf .datebox .validadeLine .k{ color: var(--brand-strong); font-weight: 1000; }
+.pdf .instLine{ margin-top: 4px; }
+.pdf .instLine .k{ color: var(--brand-strong); font-weight: 1000; }
+.pdf .instLine .v{ color:#0b1220; font-weight: 900; }
+.pdf .pdfTitleCenter{ margin: 12px 0 10px 0; }
+.pdf .clientbox{ margin-top: 12px; }
+
   </style>
 </head>
 
@@ -609,35 +642,43 @@
 
   <!-- PDF -->
   <section class="pdf" id="pdf">
-    <div class="top">
-      <div class="logoRow">
-        <img id="pdfLogo" src="logo.png" alt="logo" onerror="this.style.display='none'"/>
-      </div>
+<div class="top">
+  <div class="logoRow">
+    <img id="pdfLogo" src="logo.png" alt="logo" onerror="this.style.display='none'"/>
+  </div>
 
-      <div class="headRow">
-        <div class="datebox">
-          <small>Data de emissão</small>
-          <div id="pdfData"></div>
-          <div class="validadeLine"><span class="k">Validade:</span> <span id="pdfValidade"></span></div>
-        </div><div>
-              <span class="k">Whats:</span>
-              <span class="v whatsappLine">
-                <svg viewBox="0 0 24 24" width="14" height="14" style="margin-right:6px; vertical-align:-2px;">
-                  <path fill="#16a34a" d="M20.5 11.9c0-4.7-3.9-8.6-8.6-8.6S3.3 7.2 3.3 11.9c0 1.5.4 2.9 1.1 4.1L3 21l5.1-1.3c1.2.7 2.6 1.1 3.9 1.1 4.7 0 8.5-3.9 8.5-8.6Z"/>
-                </svg>
-                (14) 99707-3447
-              </span>
-            </div>
-          </div>
-          <div class="instLine">
-            <span class="k">Chave Pix:</span>
-            <span class="v">14 99707 3447 / Robson Andre Extecoetter / Nubank</span>
-          </div>
+  <div class="headRow">
+    <div class="instaladorBox">
+      <div class="instRow">
+        <div class="instLine">
+          <span class="k">Nome:</span>
+          <span class="v">Robson Andre Extecoetter</span>
         </div>
 
-    </div>
+        <div class="instLine">
+          <span class="k">Whats:</span>
+          <span class="v whatsappLine">
+            <svg viewBox="0 0 24 24" width="14" height="14" style="margin-right:6px; vertical-align:-2px;">
+              <path fill="#16a34a" d="M20.5 11.9c0-4.7-3.9-8.6-8.6-8.6S3.3 7.2 3.3 11.9c0 1.5.4 2.9 1.1 4.1L3 21l5.1-1.3c1.2.7 2.6 1.1 3.9 1.1 4.7 0 8.5-3.9 8.5-8.6Z"/>
+            </svg>
+            <span id="pdfWhatsFix">(14) 99707-3447</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="instLine bankLine">
+        <span class="k">Chave Pix:</span>
+        <span class="v"><span class="nubankIcon">nu</span>14 99707 3447 / Robson Andre Extecoetter</span>
+      </div>
     </div>
 
+    <div class="datebox">
+      <small>Data de emissão</small>
+      <div id="pdfData"></div>
+      <div class="validadeLine"><span class="k">Validade:</span> <span id="pdfValidade"></span></div>
+    </div>
+  </div>
+</div>
     <div class="clientbox">
       <div id="pdfClienteLine" style="font-weight:1000; color:#111827"></div>
       <div id="pdfEndereco" style="margin-top:6px; color:#334155; font-weight:800"></div>
@@ -713,16 +754,20 @@
   const PRESETS = [
     { name: "Instalação Split 9000 a a12000 BTUs", price: 650 },
     { name: "Instalação Split 18000 a 24000 BTUs", price: 800 },
-    { name: "Limpeza e Higienização (Simples)", price: 180 },
-    { name: "Limpeza Química (Desmontagem Completa)", price: 350 },
+    { name: "Limpeza e Higienização Split", price: 180 },
+    { name: "Lavagem Completa (Desmontagem do Equipamento)", price: 350 },
     { name: "Instalação Piso Teto / Cassete", price: 1200 },
     { name: "Instalação Multi-Split (Por Evaporadora)", price: 450 },
     { name: "Desinstalação de Equipamento", price: 250 },
     { name: "Aplicaçao de Vácuo no Sistema", price: 180 },
+    { name: "Troca de Componente Eletronico", price: 300 },
     { name: "Visita Técnica / Diagnostico", price: 150 },
     { name: "Pressurizaçao com Nitrogenio", price: 200 },
     { name: "Carga de Gás", price: 200 },
     { name: "Limpeza Química (Desmontagem Completa)", price: 350 },
+    { name: "PMOC", price: 350 },
+    { name: "Solda de Tubo", price: 200 },
+    { name: "Outros Serviços", price: 100 },
   ];
 
   const state = { items: [] };
@@ -850,7 +895,15 @@
     totalLabel.textContent = brl.format(totalFinal);
   }
 
-  function escapeHtml(s){
+  function formatPhoneDisplay(p){
+  // remove parênteses e espaços extras para ficar: 14 9XXXX-XXXX (ou o que o usuário digitou, sem "(" e ")")
+  return String(p || "")
+    .replace(/[()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function escapeHtml(s){
     return String(s)
       .replaceAll("&","&amp;")
       .replaceAll("<","&lt;")
@@ -863,11 +916,14 @@
     const cliente = document.getElementById('cliente').value.trim();
     const endereco = document.getElementById('endereco').value.trim();
     const telefone = document.getElementById('telefone').value.trim();
+
+    const waEl = document.getElementById('pdfWhatsFix');
+    if(waEl) waEl.textContent = formatPhoneDisplay(telefone || '(14) 99707-3447');
     const obs = document.getElementById('obs').value.trim();
     const pagamento = document.getElementById('pagamento').value.trim();
     const data = document.getElementById('data').value;
 
-    document.getElementById('pdfClienteLine').innerHTML = `<span class="lblBlue">Cliente:</span> ${escapeHtml(cliente || '')}  -  <span class="lblBlue">TEL:</span> ${escapeHtml(telefone || '')}`;
+    document.getElementById('pdfClienteLine').innerHTML = `<span class="lblBlue">Cliente:</span> ${escapeHtml(cliente || '')}  <span class="lblBlue">TEL:</span> ${escapeHtml(formatPhoneDisplay(telefone || ''))}`;
     document.getElementById('pdfEndereco').innerHTML = endereco ? `<span class="lblBlue">END:</span> ${escapeHtml(endereco)}` : '';
     document.getElementById('pdfObs').textContent = obs || "";
     document.getElementById('pdfPagamento').textContent = pagamento || "";
