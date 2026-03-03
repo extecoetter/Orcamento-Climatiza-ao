@@ -253,30 +253,38 @@
       color:#0b1220;
     }
     .pdf .top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:18px;
+      position:relative;
       border-bottom: 2px solid #eef2f7;
-      padding-bottom: 14px;
+      padding-bottom: 10px;
+      padding-top: 0px;
+      min-height: 150px;
     }
     .pdf .brand{
+      width:100%;
       display:flex;
-      gap:14px;
+      flex-direction:column;
       align-items:center;
+      text-align:center;
+      gap:10px;
+      margin-top:-10px;
     }
     .pdf .brand img{
-      width:200px; /* DOBRO */
+      width:260px; /* aumente aqui se quiser */
       height:300px;
       object-fit:contain;
+      display:block;
     }
     .pdf .brand h2{
       margin:0;
-      font-size: 16px; /* menor */
+      margin-top:-30px;
+      font-size: 18px;
       font-weight: 1000;
       color:#0b1220;
     }
     .pdf .datebox{
+      position:absolute;
+      right:0;
+      top:0;
       text-align:right;
       font-weight:1000;
       color:#111827;
@@ -361,8 +369,8 @@
     .pdf .bottom{
       margin-top: 14px;
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
+      grid-template-columns: 1fr;
+      gap:12px;
     }
     .pdf .bottom .box{
       border:1px solid #eef2f7;
@@ -378,6 +386,19 @@
       display:block;
       margin-bottom: 6px;
     }
+
+    .pdf .bottom .box.pay .value{
+      font-size: 13px;
+      font-weight: 800;
+      color:#334155;
+    }
+    .pdf .bottom .box.obs .value{
+      font-size: 14px;
+      font-weight: 800;
+      color:#334155;
+      white-space: pre-wrap;
+    }
+
 
     /* rodapé removido (sem texto) */
     .pdf .footer{ display:none; }
@@ -398,7 +419,7 @@
       <p>Adicione serviços e gere o PDF.</p>
     </div>
 
-    <div class="section-title">👤 DADOS DO ORÇAMENTO</div>
+    <div class="section-title">DADOS DO ORÇAMENTO</div>
     <div class="card">
       <div class="grid cols-2">
         <div>
@@ -422,12 +443,18 @@
       </div>
     </div>
 
-    <div class="section-title">🛠️ SERVIÇOS <small>Itens</small></div>
+    <div class="section-title">SERVIÇOS <small>Itens</small></div>
     <div class="card">
       <div id="servicesList" class="grid" style="gap:12px"></div>
 
       <button class="add" id="btnAdd">
-        <span class="plus">+</span> ADICIONAR ITEM
+        <span class="plus" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 8v8M8 12h8"></path>
+          </svg>
+        </span>
+        ADICIONAR ITEM
       </button>
 
       <div style="margin-top:12px">
@@ -493,13 +520,13 @@
     </div>
 
     <div class="bottom">
-      <div class="box">
-        <small>Forma de pagamento</small>
-        <div id="pdfPagamento" style="color:#334155; font-weight:900"></div>
-      </div>
-      <div class="box">
+      <div class="box obs">
         <small>Observações</small>
-        <div id="pdfObs" style="white-space:pre-wrap; color:#334155; font-weight:800"></div>
+        <div class="value" id="pdfObs"></div>
+      </div>
+      <div class="box pay">
+        <small>Forma de pagamento</small>
+        <div class="value" id="pdfPagamento"></div>
       </div>
     </div>
 
@@ -595,7 +622,15 @@
             <option value="-1">${it.desc ? it.desc : "Selecione..."}</option>
             ${PRESETS.map((p, idx) => `<option value="${idx}">${p.name}</option>`).join('')}
           </select>
-          <button class="trash" title="Remover">🗑️</button>
+          <button class="trash" title="Remover">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 6h18"></path>
+              <path d="M8 6V4h8v2"></path>
+              <path d="M6 6l1 16h10l1-16"></path>
+              <path d="M10 11v6"></path>
+              <path d="M14 11v6"></path>
+            </svg>
+          </button>
         </div>
 
         <div class="service-bottom">
@@ -749,4 +784,3 @@
 </script>
 </body>
 </html>
-
