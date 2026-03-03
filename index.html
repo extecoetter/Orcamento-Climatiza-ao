@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Orçamento - Climatização</title>
+  <title>Proposta Comercial</title>
 
   <style>
     :root{
@@ -13,8 +13,10 @@
       --muted:#6b7280;
       --line:#e5e7eb;
       --brand:#1f6feb;
+      --brand-strong:#0b5ed7;
       --shadow: 0 10px 30px rgba(17,24,39,.08);
       --radius:18px;
+      --pdf-soft-blue:#eaf2ff;
     }
     *{box-sizing:border-box}
     body{
@@ -29,6 +31,7 @@
       padding: 0 14px;
     }
 
+    /* TOP BAR (APP) — SEM LOGO */
     .appbar{
       background: linear-gradient(180deg, #2f80ff 0%, #1f6feb 100%);
       color:#fff;
@@ -36,28 +39,14 @@
       border-radius: 18px;
       box-shadow: var(--shadow);
       margin-bottom: 14px;
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .appbar-left{
-      display:flex; gap:12px; align-items:center;
-    }
-    .appbar img{
-      width:44px; height:44px; object-fit:contain;
-      background: rgba(255,255,255,.15);
-      border:1px solid rgba(255,255,255,.25);
-      padding:6px;
-      border-radius: 14px;
     }
     .appbar h1{
       margin:0;
       font-size: 18px;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing:.2px;
     }
-    .appbar p{margin:4px 0 0; opacity:.9; font-size: 13px}
+    .appbar p{margin:6px 0 0; opacity:.9; font-size: 13px}
 
     .section-title{
       display:flex;
@@ -85,14 +74,10 @@
       padding: 14px;
     }
 
-    .grid{
-      display:grid;
-      gap:10px;
-    }
+    .grid{ display:grid; gap:10px; }
     .grid.cols-2{ grid-template-columns: 1fr 1fr; }
-    .grid.cols-3{ grid-template-columns: 1fr 1fr 1fr; }
     @media (max-width:700px){
-      .grid.cols-2,.grid.cols-3{ grid-template-columns: 1fr; }
+      .grid.cols-2{ grid-template-columns: 1fr; }
     }
 
     label{
@@ -115,6 +100,7 @@
     }
     textarea{ min-height: 90px; resize: vertical; }
 
+    /* SERVICE ITEM */
     .service{
       border:1px solid var(--line);
       border-radius: 18px;
@@ -147,9 +133,7 @@
       .service-bottom{ grid-template-columns: 1fr; }
     }
 
-    .money{
-      position:relative;
-    }
+    .money{ position:relative; }
     .money span{
       position:absolute;
       left:14px;
@@ -210,18 +194,13 @@
       font-weight:900;
     }
 
+    /* TOTAL */
     .totals{
       display:grid;
       gap:8px;
       margin-top: 12px;
       border-top:1px solid var(--line);
       padding-top: 12px;
-    }
-    .totals .line{
-      display:flex;
-      justify-content:space-between;
-      color: var(--muted);
-      font-weight:900;
     }
     .totals .grand{
       display:flex;
@@ -236,6 +215,7 @@
       letter-spacing:.3px;
     }
 
+    /* ACTION BAR */
     .actions{
       position: fixed;
       left:0; right:0; bottom:0;
@@ -292,13 +272,9 @@
     }
     .pdf .brand h2{
       margin:0;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 1000;
-    }
-    .pdf .brand p{
-      margin:2px 0 0;
-      color:#667085;
-      font-weight:800;
+      color:#0b1220;
     }
     .pdf .datebox{
       text-align:right;
@@ -307,21 +283,22 @@
     }
     .pdf .datebox small{
       display:block;
-      color:#98a2b3;
+      color: var(--brand-strong);
       font-weight:1000;
       letter-spacing:.4px;
       text-transform: uppercase;
     }
 
     .pdf .clientbox{
-      border:1px solid #eef2f7;
+      border:1px solid #dbeafe;
+      background: var(--pdf-soft-blue);
       border-radius: 12px;
       padding: 14px;
       margin-top: 16px;
       min-height: 90px;
     }
     .pdf .clientbox small{
-      color:#98a2b3;
+      color: var(--brand-strong);
       font-weight: 1000;
       text-transform: uppercase;
       letter-spacing:.4px;
@@ -364,13 +341,6 @@
       text-align:right;
       font-weight:1000;
     }
-    .pdf .sum .panel .line{
-      display:flex;
-      justify-content:space-between;
-      color:#667085;
-      margin-bottom: 8px;
-      font-weight:900;
-    }
     .pdf .sum .panel .grand{
       display:flex;
       justify-content:space-between;
@@ -397,7 +367,7 @@
       min-height: 70px;
     }
     .pdf .bottom .box small{
-      color:#98a2b3;
+      color: var(--brand-strong);
       font-weight: 1000;
       text-transform: uppercase;
       letter-spacing:.4px;
@@ -426,13 +396,8 @@
 <body>
   <div class="wrap">
     <div class="appbar">
-      <div class="appbar-left">
-        <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
-        <div>
-          <h1>Orçamento - Climatização</h1>
-          <p>Adicione serviços e gere o PDF.</p>
-        </div>
-      </div>
+      <h1>Proposta Comercial - Climatização</h1>
+      <p>Adicione serviços e gere o PDF.</p>
     </div>
 
     <div class="section-title">👤 DADOS DO ORÇAMENTO</div>
@@ -453,19 +418,9 @@
         <input id="endereco" placeholder="Endereço (Rua, Nº, Bairro)" />
       </div>
 
-      <div class="grid cols-2" style="margin-top:10px">
-        <div>
-          <label>Data</label>
-          <input id="data" type="date" />
-        </div>
-        <div>
-          <label>Forma de pagamento</label>
-          <select id="pagamento">
-            <option value="">Selecione...</option>
-            <option>Dinheiro/Pix</option>
-            <option>Cartão</option>
-          </select>
-        </div>
+      <div style="margin-top:10px">
+        <label>Data</label>
+        <input id="data" type="date" />
       </div>
     </div>
 
@@ -479,20 +434,24 @@
 
       <div style="margin-top:12px">
         <label>Observações</label>
-        <textarea id="obs" placeholder="Observações (Ex: tubulação de cobre, suporte...)"></textarea>
+        <textarea id="obs" placeholder="Observações (EX: instalação padrão, 3M de cobre, vácuo no sistema...)"></textarea>
       </div>
 
       <div class="totals">
-        <div class="line"><span>Peças/Materiais</span><span id="materiaisLabel">R$ 0,00</span></div>
-        <div class="grand"><span>TOTAL GERAL</span><span class="value" id="totalLabel">R$ 0,00</span></div>
+        <div class="grand">
+          <span>TOTAL GERAL</span>
+          <span class="value" id="totalLabel">R$ 0,00</span>
+        </div>
       </div>
-    </div>
 
-    <div class="section-title">💰 CUSTOS OPERACIONAIS (opcional)</div>
-    <div class="card">
-      <div class="money">
-        <span>R$</span>
-        <input id="materiais" inputmode="decimal" placeholder="0,00" />
+      <!-- Forma de pagamento por último (abaixo do total geral) -->
+      <div style="margin-top:12px">
+        <label>Forma de pagamento</label>
+        <select id="pagamento">
+          <option value="">Selecione...</option>
+          <option>Dinheiro/Pix</option>
+          <option>Cartão</option>
+        </select>
       </div>
     </div>
   </div>
@@ -503,8 +462,7 @@
       <div class="brand">
         <img id="pdfLogo" src="logo.png" alt="logo" onerror="this.style.display='none'"/>
         <div>
-          <h2>Técnico</h2>
-          <p>Orçamento Profissional</p>
+          <h2>Proposta Comercial</h2>
         </div>
       </div>
       <div class="datebox">
@@ -516,8 +474,8 @@
     <div class="clientbox">
       <small>Cliente</small>
       <div id="pdfCliente" style="font-weight:1000; color:#111827"></div>
-      <div id="pdfEndereco" style="margin-top:6px; color:#667085; font-weight:800"></div>
-      <div id="pdfTelefone" style="margin-top:4px; color:#667085; font-weight:800"></div>
+      <div id="pdfEndereco" style="margin-top:6px; color:#334155; font-weight:800"></div>
+      <div id="pdfTelefone" style="margin-top:4px; color:#334155; font-weight:800"></div>
     </div>
 
     <table>
@@ -533,7 +491,6 @@
 
     <div class="sum">
       <div class="panel">
-        <div class="line"><span>Peças/Materiais:</span><span id="pdfMateriais">R$ 0,00</span></div>
         <div class="grand"><span>TOTAL GERAL</span><b id="pdfTotal">R$ 0,00</b></div>
       </div>
     </div>
@@ -569,11 +526,6 @@
     const s = String(str).replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.');
     const n = Number(s);
     return Number.isFinite(n) ? n : 0;
-  }
-
-  function formatInputBRL(input){
-    const n = parseBRL(input.value);
-    input.value = (n).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
 
   function todayISO(){
@@ -671,16 +623,11 @@
         if(idx >= 0){
           setItem(it.id, { presetIndex: idx, desc: PRESETS[idx].name, price: PRESETS[idx].price });
           priceInput.value = PRESETS[idx].price.toFixed(2).replace('.', ',');
-          formatInputBRL(priceInput);
         }
       });
 
       trash.addEventListener('click', () => removeItem(it.id));
 
-      priceInput.addEventListener('blur', () => {
-        formatInputBRL(priceInput);
-        setItem(it.id, { price: parseBRL(priceInput.value) });
-      });
       priceInput.addEventListener('input', () => {
         setItem(it.id, { price: parseBRL(priceInput.value) });
       });
@@ -700,25 +647,16 @@
     });
   }
 
-  const materiaisInput = document.getElementById('materiais');
-  const materiaisLabel = document.getElementById('materiaisLabel');
   const totalLabel = document.getElementById('totalLabel');
 
   function recalc(){
-    const materiais = parseBRL(materiaisInput.value);
-    let totalServ = 0;
+    let total = 0;
     for(const it of state.items){
       const sub = (Number(it.price) || 0) * (Number(it.qty) || 0);
-      totalServ += sub;
+      total += sub;
     }
-    const total = totalServ + materiais;
-
-    materiaisLabel.textContent = brl.format(materiais);
     totalLabel.textContent = brl.format(total);
   }
-
-  materiaisInput.addEventListener('blur', () => { formatInputBRL(materiaisInput); recalc(); });
-  materiaisInput.addEventListener('input', recalc);
 
   function escapeHtml(s){
     return String(s)
@@ -752,12 +690,12 @@
     const tbody = document.getElementById('pdfTbody');
     tbody.innerHTML = "";
 
-    let totalServ = 0;
+    let total = 0;
     state.items.forEach(it => {
       const desc = it.desc || "Serviço";
       const qty = Number(it.qty) || 1;
       const sub = (Number(it.price)||0) * qty;
-      totalServ += sub;
+      total += sub;
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -768,10 +706,6 @@
       tbody.appendChild(tr);
     });
 
-    const materiais = parseBRL(materiaisInput.value);
-    const total = totalServ + materiais;
-
-    document.getElementById('pdfMateriais').textContent = brl.format(materiais);
     document.getElementById('pdfTotal').textContent = brl.format(total);
   }
 
@@ -790,14 +724,13 @@
     document.getElementById('telefone').value = "";
     document.getElementById('obs').value = "";
     document.getElementById('pagamento').value = "";
-    materiaisInput.value = "";
     document.getElementById('data').value = todayISO();
     recalc();
   });
 
   // init
   document.getElementById('data').value = todayISO();
-  renderItems();    // começa zerado
+  renderItems(); // começa zerado
   recalc();
 </script>
 </body>
