@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Proposta Comercial</title>
+  <title>Proposta Comercial - Climatização</title>
 
   <style>
     :root{
@@ -308,6 +308,53 @@
       font-size: 14px;
       font-weight: 1000;
     }
+
+    .pdf .datebox .validadeLine{
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 900;
+      color:#0b1220;
+    }
+    .pdf .datebox .validadeLine .k{ color: var(--brand-strong); font-weight: 1000; }
+
+    .pdf .instaladorBox{
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #eef2f7;
+      font-size: 12px;
+      font-weight: 900;
+      color:#0b1220;
+    }
+    .pdf .instLine{ margin-top: 4px; }
+    .pdf .instLine .k{ color: var(--brand-strong); font-weight: 1000; }
+    .pdf .instLine .v{ color:#0b1220; font-weight: 900; }
+
+    .pdf .iconWA{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:16px;
+      height:16px;
+      border-radius: 999px;
+      color:#16a34a;
+      margin: 0 6px 0 6px;
+      vertical-align: -2px;
+    }
+    .pdf .nubankIcon{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:18px;
+      height:18px;
+      border-radius: 6px;
+      background:#7d2ae8;
+      color:#fff;
+      font-weight:1000;
+      font-size: 11px;
+      margin-right: 8px;
+      text-transform: lowercase;
+    }
+    .pdf .bankLine{ display:flex; align-items:center; gap:0; }
 .pdf .datebox{
       text-align:right;
       font-weight:1000;
@@ -379,6 +426,14 @@
       text-align:right;
       font-weight:1000;
     }
+    .pdf .sum .panel .line{
+      display:flex;
+      justify-content:space-between;
+      color:#667085;
+      margin-bottom: 6px;
+      font-weight:900;
+    }
+
     .pdf .sum .panel .grand{
       display:flex;
       justify-content:space-between;
@@ -471,6 +526,11 @@
         <label>Data</label>
         <input id="data" type="date" />
       </div>
+
+      <div style="margin-top:10px">
+        <label>Validade da proposta</label>
+        <input id="validade" placeholder="Ex: 7 dias" />
+      </div>
     </div>
 
     <div class="section-title">🛠️ SERVIÇOS <small>Itens</small></div>
@@ -492,6 +552,14 @@
           <span class="value" id="totalLabel">R$ 0,00</span>
         </div>
       </div>
+      <div style="margin-top:12px">
+        <label>Desconto (R$)</label>
+        <div class="money">
+          <span>R$</span>
+          <input id="desconto" inputmode="decimal" placeholder="0,00" />
+        </div>
+      </div>
+
 
       <div style="margin-top:12px">
         <label>Forma de pagamento</label>
@@ -516,7 +584,28 @@
         <div class="datebox">
           <small>Data de emissão</small>
           <div id="pdfData"></div>
+          <div class="validadeLine"><span class="k">Validade:</span> <span id="pdfValidade"></span></div>
         </div>
+        <div class="instaladorBox">
+          <div class="instLine"><span class="k">Nome:</span> <span class="v">Robson Andre Extecoetter</span></div>
+          <div class="instLine">
+            <span class="k">Whats:</span>
+            <span class="v">
+              <span class="iconWA" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14">
+                  <path fill="currentColor" d="M20.5 11.9c0-4.7-3.9-8.6-8.6-8.6S3.3 7.2 3.3 11.9c0 1.5.4 2.9 1.1 4.1L3 21l5.1-1.3c1.2.7 2.6 1.1 3.9 1.1 4.7 0 8.5-3.9 8.5-8.6Zm-8.6 7.2c-1.3 0-2.5-.4-3.6-1l-.3-.2-3 .8.8-2.9-.2-.3c-.7-1.1-1-2.3-1-3.6 0-3.9 3.2-7.1 7.1-7.1s7.1 3.2 7.1 7.1-3.1 7.2-6.9 7.2Zm4-5.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.6.1-.2.2-.6.7-.8.9-.1.2-.3.2-.5.1-.2-.1-.9-.3-1.7-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.4.1-.5l.4-.5c.1-.2.1-.4 0-.6-.1-.2-.6-1.4-.7-1.6-.1-.2-.3-.3-.5-.3h-.4c-.2 0-.4.1-.5.3-.2.2-.7.7-.7 1.7s.7 2 1 2.3c.1.2 1.4 2.2 3.5 3 .5.2.9.3 1.2.4.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2Z"/>
+                </svg>
+              </span>
+              (14) 99707-3447
+            </span>
+          </div>
+          <div class="instLine"><span class="k">Chave Pix:</span> <span class="v">14 99707 3447</span></div>
+          <div class="instLine bankLine">
+            <span class="nubankIcon" aria-hidden="true">nu</span>
+            <span class="v">Robson Andre Extecoetter / Nubank</span>
+          </div>
+        </div>
+
       </div>
     </div>
     </div>
@@ -541,6 +630,7 @@
 
     <div class="sum">
       <div class="panel">
+        <div class="line"><span>Desconto:</span><span id="pdfDesconto">R$ 0,00</span></div>
         <div class="grand"><span>TOTAL GERAL</span><b id="pdfTotal">R$ 0,00</b></div>
       </div>
     </div>
@@ -585,21 +675,16 @@
   const PRESETS = [
     { name: "Instalação Split 9000 a a12000 BTUs", price: 650 },
     { name: "Instalação Split 18000 a 24000 BTUs", price: 800 },
-    { name: "Limpeza e Higienização Split", price: 180 },
-    { name: "Lavagem Completa (Desmontagem do Equipamento)", price: 350 },
+    { name: "Limpeza e Higienização (Simples)", price: 180 },
+    { name: "Limpeza Química (Desmontagem Completa)", price: 350 },
     { name: "Instalação Piso Teto / Cassete", price: 1200 },
     { name: "Instalação Multi-Split (Por Evaporadora)", price: 450 },
     { name: "Desinstalação de Equipamento", price: 250 },
     { name: "Aplicaçao de Vácuo no Sistema", price: 180 },
-    { name: "Troca de Componente Eletronico", price: 300 },
     { name: "Visita Técnica / Diagnostico", price: 150 },
     { name: "Pressurizaçao com Nitrogenio", price: 200 },
     { name: "Carga de Gás", price: 200 },
     { name: "Limpeza Química (Desmontagem Completa)", price: 350 },
-    { name: "PMOC", price: 350 },
-    { name: "Solda de Tubo", price: 200 },
-    { name: "Outros Serviços", price: 100 },
-    { name: "Serviço", price: 150 },
   ];
 
   const state = { items: [] };
@@ -722,7 +807,9 @@
       const sub = (Number(it.price) || 0) * (Number(it.qty) || 0);
       total += sub;
     }
-    totalLabel.textContent = brl.format(total);
+    const desconto = parseBRL(document.getElementById('desconto')?.value || '');
+    const totalFinal = Math.max(0, total - desconto);
+    totalLabel.textContent = brl.format(totalFinal);
   }
 
   function escapeHtml(s){
@@ -773,7 +860,19 @@
       tbody.appendChild(tr);
     });
 
-    document.getElementById('pdfTotal').textContent = brl.format(total);
+    const desconto = parseBRL(document.getElementById('desconto')?.value || '');
+    const totalFinal = Math.max(0, total - desconto);
+
+    const validade = (document.getElementById('validade')?.value || '').trim();
+    const validadeTxt = validade || "7 dias";
+
+    const pdfDescontoEl = document.getElementById('pdfDesconto');
+    if(pdfDescontoEl) pdfDescontoEl.textContent = brl.format(desconto);
+
+    const pdfValEl = document.getElementById('pdfValidade');
+    if(pdfValEl) pdfValEl.textContent = validadeTxt;
+
+    document.getElementById('pdfTotal').textContent = brl.format(totalFinal);
   }
 
   document.getElementById('btnAdd').addEventListener('click', addItem);
@@ -792,8 +891,20 @@
     document.getElementById('obs').value = "";
     document.getElementById('pagamento').value = "";
     document.getElementById('data').value = todayISO();
+  const vEl = document.getElementById('validade'); if(vEl && !vEl.value) vEl.value = "7 dias";
     recalc();
   });
+
+  const descontoEl = document.getElementById('desconto');
+  if(descontoEl){
+    descontoEl.addEventListener('input', recalc);
+    descontoEl.addEventListener('blur', () => {
+      const v = parseBRL(descontoEl.value);
+      // formata no padrão pt-BR (sem R$ porque já tem o prefixo)
+      descontoEl.value = (v).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      recalc();
+    });
+  }
 
   // init
   document.getElementById('data').value = todayISO();
@@ -802,5 +913,3 @@
 </script>
 </body>
 </html>
-
-
