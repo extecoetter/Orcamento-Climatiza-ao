@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Proposta Comercial</title>
+  <title>Proposta Comercial - Climatização</title>
 
   <style>
     :root{
@@ -795,8 +795,31 @@
     <div class="inner">
       <button class="btn" id="btnLimpar">Limpar</button>
       <button class="btn primary" id="btnPdf">Gerar PDF</button>
+          <button cla
+<!-- Libs para gerar PDF e compartilhar (necessita internet, ou salve os arquivos localmente no seu repo) -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+ss="btn" id="btnWhats" type="button">Enviar para WhatsApp</button>
     </div>
   </div>
+
+
+<!-- Config por cliente (coloque um config.js dentro da pasta do cliente) -->
+<script>
+  // Se existir um arquivo "config.js" na mesma pasta, ele deve definir: window.CLIENT_CONFIG = { installer: {...}, logo: "logo.png" }
+  window.CLIENT_CONFIG = window.CLIENT_CONFIG || null;
+</script>
+<script src="config.js"></script>
+<script>
+  // Fallback: se não existir config.js, usa este padrão
+  const INSTALLER = (window.CLIENT_CONFIG && window.CLIENT_CONFIG.installer) ? window.CLIENT_CONFIG.installer : {
+    nome: "Robson Andre Extecoetter",
+    whats: "(14) 99707-3447",
+    pix: "14 99707 3447 / Robson A Extecoetter",
+    logo: "logo.png"
+  };
+</script>
 
 <script>
   const brl = new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' });
@@ -976,6 +999,26 @@ function escapeHtml(s){
   }
 
   function fillPDF(){
+
+// Dados do instalador (config por cliente)
+const logoEl = document.getElementById('pdfLogo');
+if(logoEl && INSTALLER && INSTALLER.logo) logoEl.src = INSTALLER.logo;
+
+const nomeInst = (INSTALLER && INSTALLER.nome) ? INSTALLER.nome : "";
+const whatsInst = (INSTALLER && INSTALLER.whats) ? INSTALLER.whats : "";
+const pixInst = (INSTALLER && INSTALLER.pix) ? INSTALLER.pix : "";
+
+const waElFix = document.getElementById('pdfWhatsFix');
+if(waElFix) waElFix.textContent = whatsInst;
+
+// Atualiza Chave Pix (linha do instalador)
+const pixLine = document.querySelector('.pdf .bankLine .v');
+if(pixLine) pixLine.textContent = pixInst;
+
+// Atualiza Nome do instalador (linha do topo)
+const nomeLine = document.querySelector('.pdf .instLine .v');
+if(nomeLine) nomeLine.textContent = nomeInst;
+
     const cliente = document.getElementById('cliente').value.trim();
     const endereco = document.getElementById('endereco').value.trim();
     const telefone = document.getElementById('telefone').value.trim();
@@ -1028,12 +1071,89 @@ const obs = document.getElementById('obs').value.trim();
     document.getElementById('pdfTotal').textContent = brl.format(totalFinal);
   }
 
+async function gerarPdfBlob(){
+  // Gera um PDF a partir da seção #pdf (sem abrir print)
+  const pdfEl = document.getElementById('pdf');
+  if(!pdfEl) throw new Error("Seção do PDF não encontrada.");
+  // Renderiza em canvas (melhor em mobile se o elemento estiver visível)
+  const canvas = await html2canvas(pdfEl, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+  const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
+
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+
+  // Ajusta imagem à largura da página, mantendo proporção
+  const imgW = pageW;
+  const imgH = (canvas.height * imgW) / canvas.width;
+
+  if(imgH <= pageH){
+    doc.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
+  }else{
+    // Paginação simples (corta em múltiplas páginas)
+    let y = 0;
+    let remaining = imgH;
+    while(remaining > 0){
+      doc.addImage(imgData, "JPEG", 0, -y, imgW, imgH);
+      remaining -= pageH;
+      y += pageH;
+      if(remaining > 0) doc.addPage();
+    }
+  }
+
+  const blob = doc.output("blob");
+  return blob;
+}
+
+async function enviarPdfParaWhatsapp(){
+  fillPDF();
+
+  const fileName = "proposta.pdf";
+  try{
+    const blob = await gerarPdfBlob();
+    const file = new File([blob], fileName, { type: "application/pdf" });
+
+    if(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({
+        title: "Proposta Comercial",
+        text: "Segue a proposta em PDF.",
+        files: [file]
+      });
+      return;
+    }
+
+    // Fallback: abre WhatsApp com mensagem (anexo precisa ser manual)
+    const msg = encodeURIComponent("Segue a proposta. (Se o PDF não anexar automaticamente, clique em anexo e selecione o arquivo salvo.)");
+    window.open("https://wa.me/?text=" + msg, "_blank");
+
+    // E baixa o PDF para o usuário anexar
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  }catch(err){
+    alert("Não foi possível gerar/compartilhar o PDF: " + (err && err.message ? err.message : err));
+  }
+}
+
+
+
   document.getElementById('btnAdd').addEventListener('click', addItem);
 
   document.getElementById('btnPdf').addEventListener('click', () => {
     fillPDF();
     window.print();
   });
+
+  const btnWhats = document.getElementById('btnWhats');
+  if(btnWhats){
+    btnWhats.addEventListener('click', enviarPdfParaWhatsapp);
+  }
 
   document.getElementById('btnLimpar').addEventListener('click', () => {
     state.items = [];
