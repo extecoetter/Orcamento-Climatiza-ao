@@ -248,7 +248,7 @@
     /* PDF (PRINT) */
     .pdf{
       display:none;
-      padding: 14px;
+      padding: 12px;
       background:#fff;
       color:#0b1220;
     }
@@ -265,10 +265,13 @@
 
     .pdf .top{
       position:relative;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
       border-bottom: 1px solid #e5e7eb;
       padding-bottom: 8px;
       padding-top: 0px;
-      min-height: 95px; /* ainda menos espaço */
     }
     .pdf .brand{
       width:100%;
@@ -277,7 +280,7 @@
       align-items:flex-start;
       text-align:left;
       gap:6px;
-      margin-top:-55px; /* sobe, mas sem cobrir a data */
+      margin-top:-20px;
     }
     .pdf .brand img{
       width:310px; /* ajuste aqui se quiser */
@@ -295,15 +298,10 @@
       letter-spacing:.2px;
     }
     .pdf .datebox{
-      position:absolute;
-      right:0;
-      top:0;
-      z-index:30;
       text-align:right;
       font-weight:1000;
       color:#111827;
-      background:#fff;
-      padding: 2px 0 2px 12px;
+      min-width: 170px;
     }
     .pdf .datebox small{
       display:block;
@@ -399,7 +397,12 @@
     }
 
     .pdf .bottom .value{ text-align:left; }
-    .pdf .bottom .box.pay .value{ font-size: 12px; font-weight:800; color:#334155; }
+    .pdf .bottom .box.pay .value{
+      font-size: 12px;
+      font-weight: 800;
+      color:#334155;
+      text-align:left;
+    }
     .pdf .bottom .box.obs .value{ font-size: 14px; font-weight:800; color:#334155; white-space:pre-wrap; }
 
 
@@ -526,6 +529,8 @@
       <div class="panel">
         <div class="grand"><span>TOTAL GERAL</span><b id="pdfTotal">R$ 0,00</b></div>
       </div>
+    </div>
+
     <div class="bottom">
       <div class="box obs">
         <small>Observações</small>
@@ -537,7 +542,6 @@
       </div>
     </div>
 
-    </div>
     <div class="footer"></div>
   </section>
 
