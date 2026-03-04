@@ -3,16 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Abrindo app…</title>
+  <title>Abrindo…</title>
 </head>
 <body>
 <script>
-  // Detecta a base do GitHub Pages (inclui /NOME_DO_REPO)
-  const p = location.pathname.replace(/\/$/, "");
-  const base = p.split("/clientes/")[0];
+  // Exemplo de pathname no GitHub Pages:
+  // /NOME_DO_REPO/clientes/robsonextecoetter/
+  // Queremos redirecionar para:
+  // /NOME_DO_REPO/app/index.html?c=robsonextecoetter
 
   const slug = "robsonextecoetter";
-  const target = base + "/app/index.html?c=" + encodeURIComponent(slug);
+
+  const parts = location.pathname.split("/").filter(Boolean);
+  const idx = parts.indexOf("clientes");
+
+  // tudo antes de "clientes" é a base (inclui /NOME_DO_REPO se existir)
+  const baseParts = idx >= 0 ? parts.slice(0, idx) : parts.slice(0, 1);
+  const base = "/" + baseParts.join("/"); // "" -> "/", "repo" -> "/repo"
+
+  const target = (base === "/" ? "" : base) + "/app/index.html?c=" + encodeURIComponent(slug);
 
   location.replace(target);
 </script>
