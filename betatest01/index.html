@@ -987,27 +987,27 @@
 
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
-
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
 
-      const imgW = pageW;
-      const imgH = (canvas.height * imgW) / canvas.width;
+      // Ajuste Android: encaixar em 1 página (sem cortar / sem virar 2 páginas)
+      // Mantém proporção e adiciona uma margem.
+      const margin = 18; // pts
+      const maxW = pageW - margin * 2;
+      const maxH = pageH - margin * 2;
 
-      if(imgH <= pageH){
-        doc.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
-      }else{
-        let y = 0;
-        let remaining = imgH;
-        while(remaining > 0){
-          doc.addImage(imgData, "JPEG", 0, -y, imgW, imgH);
-          remaining -= pageH;
-          y += pageH;
-          if(remaining > 0) doc.addPage();
-        }
-      }
+      const rawW = canvas.width;
+      const rawH = canvas.height;
 
-      return doc.output("blob");
+      const scale = Math.min(maxW / rawW, maxH / rawH);
+      const drawW = rawW * scale;
+      const drawH = rawH * scale;
+
+      const x = (pageW - drawW) / 2;
+      const y = margin;
+
+      doc.addImage(imgData, "JPEG", x, y, drawW, drawH);
+return doc.output("blob");
     }
 
     async function enviarPdfParaWhatsapp(){
