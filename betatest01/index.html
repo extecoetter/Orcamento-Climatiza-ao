@@ -949,7 +949,7 @@
     }
 
     async function loadPdfLibs(){
-      // Carrega libs SOMENTE quando precisar (evita erro no Android/PWA offline)
+      // Carrega libs somente quando precisar (evita quebrar PWA/offline)
       function load(src){
         return new Promise((resolve, reject) => {
           const s = document.createElement("script");
@@ -974,13 +974,13 @@
       const pdfEl = document.getElementById('pdf');
       if(!pdfEl) throw new Error("Seção do PDF não encontrada.");
 
-      // Garante que o PDF esteja renderizado para capturar
+      // Garante que o PDF esteja visível pra capturar
       const prev = pdfEl.style.display;
       pdfEl.style.display = "block";
 
       const canvas = await html2canvas(pdfEl, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
 
-      // volta pro estado anterior (não atrapalha a tela)
+      // volta pro estado anterior
       pdfEl.style.display = prev || "";
 
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -1010,6 +1010,11 @@
       return doc.output("blob");
     }
 
+    async function enviarPdfParaWhatsapp(){
+      // Mantido por compatibilidade (não usado). Use o botão "Compartilhar PDF".
+      return compartilharPdf();
+    }
+
     async function compartilharPdf(){
       fillPDF();
 
@@ -1018,7 +1023,6 @@
         const blob = await gerarPdfBlob();
         const file = new File([blob], fileName, { type: "application/pdf" });
 
-        // Android/Chrome moderno: abre a folha de compartilhamento com o PDF já anexado
         if(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })){
           await navigator.share({
             title: "Proposta Comercial",
@@ -1028,11 +1032,11 @@
           return;
         }
 
-        // Fallback: abre em uma nova aba (o usuário pode apertar "Compartilhar" no visualizador)
+        // Fallback: abre em nova aba (usuário pode compartilhar pelo visualizador)
         const url = URL.createObjectURL(blob);
         window.open(url, "_blank");
 
-        // E também baixa (caso o visualizador não abra)
+        // E baixa também, caso o visualizador não abra
         const a = document.createElement("a");
         a.href = url;
         a.download = fileName;
@@ -1041,22 +1045,7 @@
         a.remove();
         setTimeout(()=>URL.revokeObjectURL(url), 4000);
 
-        alert("Seu Android não liberou o compartilhamento automático. Abri o PDF em uma nova aba e também baixei o arquivo.");
-      }catch(err){
-        alert("Não foi possível gerar/compartilhar o PDF: " + (err && err.message ? err.message : err));
-      }
-    }
-
-        const msg = encodeURIComponent("Segue a proposta. (Se o PDF não anexar automaticamente, clique em anexo e selecione o arquivo salvo.)");
-        window.open("https://wa.me/?text=" + msg, "_blank");
-
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+        alert("Seu Android não liberou o compartilhamento automático. Abri o PDF e também baixei o arquivo.");
       }catch(err){
         alert("Não foi possível gerar/compartilhar o PDF: " + (err && err.message ? err.message : err));
       }
