@@ -1,11 +1,20 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<script>
-window.location.href = "/app/index.html?c=robsonextecoetter";
-</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Abrindo…</title>
 </head>
 <body>
+<script>
+  const slug = "robsonextecoetter";
+
+  // Ex: /meurepo/clientes/robsonextecoetter/  -> base = /meurepo
+  const path = location.pathname.replace(/\/$/, "");
+  const base = path.split("/clientes/")[0];
+
+  const target = base + "/app/index.html?c=" + encodeURIComponent(slug);
+  location.replace(target);
+</script>
 </body>
 </html>
