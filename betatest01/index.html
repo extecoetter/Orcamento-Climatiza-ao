@@ -3,7 +3,7 @@
 <!-- =========================================================
      ORÇAMENTO CLIMATIZAÇÃO — BETA
      Arquivo: index.html (único)
-     Versão: BETA 0.1.14
+     Versão: BETA 0.1.15
      Regras:
      - Mudanças devem ser "cirúrgicas"
      - Evitar mexer em layout do PDF sem necessidade
@@ -500,13 +500,17 @@
 
       #betaBadge{ display:none !important; }
 
-      /* BETA 0.1.14: ocultar dados do instalador no PDF (só CSS) */
+      /* BETA 0.1.15: ocultar dados do instalador no PDF (só CSS) */
       .pdf .instaladorBox{ display:none !important; }
     }
+  
+    /* Captura do PDF (Compartilhar): manter igual ao print (sem dados do instalador) */
+    #pdf[data-capture="1"] .instaladorBox{ display:none !important; }
+
   </style>
 <script>
     // === BETA CONFIG ======================================================
-    window.APP_VERSION = "0.1.14";
+    window.APP_VERSION = "0.1.15";
     // =====================================================================
     try{ document.title = "Orçamento Climatização - BETA " + window.APP_VERSION; }catch(e){}
   </script>
@@ -978,7 +982,10 @@
       const prev = pdfEl.style.display;
       pdfEl.style.display = "block";
 
-      const canvas = await html2canvas(pdfEl, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+
+      const canvas = await html2canvas(pdfEl, { scale: 1.6, useCORS: true, backgroundColor: "#ffffff" });
 
       // volta pro estado anterior
       pdfEl.style.display = prev || "";
@@ -999,8 +1006,8 @@
       const rawW = canvas.width;
       const rawH = canvas.height;
 
-      const scale = Math.min(maxW / rawW, maxH / rawH);
-      const drawW = rawW * scale;
+      const scale = Math.min(maxW / rawW, maxH / rawH) * 0.95;
+const drawW = rawW * scale;
       const drawH = rawH * scale;
 
       const x = (pageW - drawW) / 2;
@@ -1091,10 +1098,10 @@ return doc.output("blob");
     renderItems();
     recalc();
 
-    // PWA: Service Worker (BETA 0.1.14)
+    // PWA: Service Worker (BETA 0.1.15)
     if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js?v=0.1.14').catch(()=>{});
+        navigator.serviceWorker.register('service-worker.js?v=0.1.15').catch(()=>{});
       });
     }
   </script>
